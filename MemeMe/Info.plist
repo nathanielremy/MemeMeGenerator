@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Your pictures are safe with us</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Your photos are safe with us</string>
 	<key>CFBundleDevelopmentRegion</key>

@@ -21,5 +21,4 @@ class BottomTextFieldDelegate: NSObject, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
 }
