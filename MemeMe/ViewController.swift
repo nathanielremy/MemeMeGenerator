@@ -8,13 +8,14 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController {
     
     //MARK: UI Properties
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
+    @IBOutlet weak var photoLibraryButton: UIBarButtonItem!
     @IBOutlet weak var activityButton: UIBarButtonItem!
     @IBOutlet weak var topToolBar: UIToolbar!
     @IBOutlet weak var bottomStackView: UIStackView!
@@ -25,7 +26,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configuretextFields()
+        configuretextField(for: topTextField, withText: "TOP", delegate: topTextFieldDelegate)
+        configuretextField(for: bottomTextField, withText: "BOTTOM", delegate: bottomTextFieldDelegate)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
     }
     
@@ -47,27 +49,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         removeNotificationCenterObservers()
     }
     
-    //When user has taken or chosen an image, the pickerView will dismiss and the imagePickerView will set it's image
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info["UIImagePickerControllerOriginalImage"] as? UIImage {
-            imagePickerView.image = image
+    // Open Photo Library or camera to select an image
+    @IBAction func pickAnImage(_ sender: UIBarButtonItem) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sender == cameraButton ? .camera : .photoLibrary
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    //MARK: Launch activity View
+    @IBAction func launchActivityView(_ sender: Any) {
+        let memedImage = generateMemedImage()
+        let activityView = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
+        activityView.completionWithItemsHandler = { _ in
+            self.save()
         }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    //Open PhotoLibrary to select an image
-    @IBAction func pickAnImage(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    @IBAction func takeAnImage(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .camera
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
+        present(activityView, animated: true, completion: nil)
     }
     
     //Function to call when keyBoardWillShow
@@ -91,7 +88,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return keyboardSize.cgRectValue.height
     }
     
-    func configuretextFields() {
+    func configuretextField(for textField: UITextField, withText text: String, delegate: UITextFieldDelegate) {
         // TextField text attributes
         let memeTextAttributes:[String:Any] = [
             NSStrokeColorAttributeName: UIColor.black,
@@ -100,19 +97,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             NSStrokeWidthAttributeName: -2
         ]
         
-        topTextField.text = "TOP"
-        topTextField.autocapitalizationType = .allCharacters
-        topTextField.borderStyle = .none
-        topTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = .center
-        topTextField.delegate = topTextFieldDelegate
-        
-        bottomTextField.text = "BOTTOM"
-        bottomTextField.autocapitalizationType = .allCharacters
-        bottomTextField.borderStyle = .none
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.textAlignment = .center
-        bottomTextField.delegate = bottomTextFieldDelegate
+        textField.text = text
+        textField.autocapitalizationType = .allCharacters
+        textField.borderStyle = .none
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.textAlignment = .center
+        textField.delegate = delegate
     }
     
     //Add observers for keyboard showing and removal
@@ -134,8 +124,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //Generate a meme by configuring the view
     func generateMemedImage() -> UIImage {
         
-        topToolBar.isHidden = true
-        bottomStackView.isHidden = true
+        hideViews(views: [topToolBar, bottomStackView], true)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -143,20 +132,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        topToolBar.isHidden = false
-        bottomStackView.isHidden = false
+        hideViews(views: [topToolBar, bottomStackView], false)
         
         return memedImage
     }
     
-    //MARK: Launch activity View
-    @IBAction func launchActivityView(_ sender: Any) {
-        let memedImage = generateMemedImage()
-        let activityView = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
-        activityView.completionWithItemsHandler = { _ in
-            self.save()
+    func hideViews(views: [UIView], _ hide: Bool) {
+        for view in views {
+            view.isHidden = hide
         }
-        present(activityView, animated: true, completion: nil)
-        
     }
 }

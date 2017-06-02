@@ -47,7 +47,7 @@
                                         <items>
                                             <barButtonItem title="Library" id="UQ4-ko-TNz">
                                                 <connections>
-                                                    <action selector="pickAnImage:" destination="BYZ-38-t0r" id="0Ep-ih-glj"/>
+                                                    <action selector="pickAnImage:" destination="BYZ-38-t0r" id="PYU-Le-0D6"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
@@ -57,7 +57,7 @@
                                         <items>
                                             <barButtonItem systemItem="camera" id="7DJ-kj-7Vu">
                                                 <connections>
-                                                    <action selector="takeAnImage:" destination="BYZ-38-t0r" id="UIL-RJ-10D"/>
+                                                    <action selector="pickAnImage:" destination="BYZ-38-t0r" id="EuJ-Ox-XIu"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
@@ -131,6 +131,7 @@
                         <outlet property="bottomTextField" destination="am4-RG-ZiO" id="3G0-jR-3uS"/>
                         <outlet property="cameraButton" destination="7DJ-kj-7Vu" id="3W7-Sd-R2F"/>
                         <outlet property="imagePickerView" destination="wQP-ZZ-mSV" id="sTQ-Eb-j98"/>
+                        <outlet property="photoLibraryButton" destination="UQ4-ko-TNz" id="mKc-Nc-poU"/>
                         <outlet property="topTextField" destination="Qh3-oj-mMn" id="OcO-HT-Eab"/>
                         <outlet property="topToolBar" destination="kBp-bn-xJe" id="K9M-gm-GLh"/>
                     </connections>
