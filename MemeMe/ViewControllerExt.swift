@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension ViewController:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension MemeEditorVC:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     //When user has taken or chosen an image, the pickerView will dismiss and the imagePickerView will set it's image
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

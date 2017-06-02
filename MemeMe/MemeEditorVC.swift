@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MemeEditorVC: UIViewController {
     
     //MARK: UI Properties
     @IBOutlet weak var topTextField: UITextField!
@@ -61,8 +61,11 @@ class ViewController: UIViewController {
     @IBAction func launchActivityView(_ sender: Any) {
         let memedImage = generateMemedImage()
         let activityView = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
-        activityView.completionWithItemsHandler = { _ in
-            self.save()
+        activityView.completionWithItemsHandler = { (activity, completed, items, error) in
+            if completed {
+                self.save()
+            }
+            
         }
         present(activityView, animated: true, completion: nil)
     }
@@ -107,8 +110,8 @@ class ViewController: UIViewController {
     
     //Add observers for keyboard showing and removal
     func addNotificationCenterObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemeEditorVC.keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemeEditorVC.keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
     
     //Remove observers for keyboard showing and removal
