@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorVC.swift
 //  MemeMe
 //
 //  Created by Nathaniel Remy on 2017-06-01.
@@ -48,6 +48,12 @@ class MemeEditorVC: UIViewController {
         super.viewWillDisappear(animated)
         removeNotificationCenterObservers()
     }
+    
+    //Cancel
+    @IBAction func cancelMemeEditor(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     
     // Open Photo Library or camera to select an image
     @IBAction func pickAnImage(_ sender: UIBarButtonItem) {
@@ -121,7 +127,10 @@ class MemeEditorVC: UIViewController {
     }
     
     func save() {
-        let _ = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
+        let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.memes.append(meme)
     }
     
     //Generate a meme by configuring the view

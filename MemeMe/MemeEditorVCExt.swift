@@ -1,5 +1,5 @@
 //
-//  ViewControllerExt.swift
+//  MemeEditorVCExt.swift
 //  MemeMe
 //
 //  Created by Nathaniel Remy on 2017-06-02.
