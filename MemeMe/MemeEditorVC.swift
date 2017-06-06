@@ -17,7 +17,7 @@ class MemeEditorVC: UIViewController {
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var photoLibraryButton: UIBarButtonItem!
     @IBOutlet weak var activityButton: UIBarButtonItem!
-    @IBOutlet weak var topToolBar: UIToolbar!
+    @IBOutlet weak var topStackView: UIStackView!
     @IBOutlet weak var bottomStackView: UIStackView!
     
     //Delegates properties
@@ -131,12 +131,13 @@ class MemeEditorVC: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memes.append(meme)
+        print(appDelegate.memes.count)
     }
     
     //Generate a meme by configuring the view
     func generateMemedImage() -> UIImage {
         
-        hideViews(views: [topToolBar, bottomStackView], true)
+        hideViews(views: [topStackView, bottomStackView], true)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -144,7 +145,7 @@ class MemeEditorVC: UIViewController {
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        hideViews(views: [topToolBar, bottomStackView], false)
+        hideViews(views: [topStackView, bottomStackView], false)
         
         return memedImage
     }

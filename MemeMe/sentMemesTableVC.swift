@@ -14,21 +14,26 @@ class sentMemesTableVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet weak var tableView: UITableView!
     
     var memes = [Meme]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
-        print("Apper")
-        configureBarButtonItem()
-        tableView.delegate = self
-        tableView.dataSource = self
-        
+        configureBars()
+        tableView.reloadData()
     }
     
     
-    func configureBarButtonItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(sentMemesTableVC.showMemeEditor))
+    func configureBars() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New", style: .done, target: self, action: #selector(sentMemesTableVC.showMemeEditor))
+        tabBarController?.tabBar.isHidden = false
     }
     
     func showMemeEditor() {
@@ -36,22 +41,28 @@ class sentMemesTableVC: UIViewController, UITableViewDelegate, UITableViewDataSo
         present(memeEditor, animated: true, completion: nil)
     }
     
-    //MARK: Delegate Methods
+    //MARK: Delegate & DataSource Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        print("NumberOfRowsInSection")
-        
         let rowCount = memes.count
         return rowCount
     }
     
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "sentVillainsTableCell") as? MemeTableViewCell else { fatalError() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "sentMemesTableCell") as? MemeTableViewCell else { fatalError() }
         
-        print("Cell For Row At")
         cell.memeImageView.image = memes[indexPath.row].memedImage
         cell.memeTitlelLabel.text = memes[indexPath.row].fullText
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "DetailVC") as? DetailVC else { print("NIIIILLLLL")
+            return }
+        detailVC.meme = memes[indexPath.row]
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
